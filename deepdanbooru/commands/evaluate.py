@@ -40,7 +40,8 @@ def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow
 
     if not tags_path and not project_path:
         raise Exception('You must provide project path or tags path.')
-
+    #print("A")
+    #print(target_paths)
     target_image_paths = []
 
     for target_path in target_paths:
@@ -48,9 +49,11 @@ def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow
             target_image_paths.extend(dd.io.get_image_file_paths_recursive(target_path, folder_filters))
         else:
             target_image_paths.append(target_path)
-
+    #print("B")
+    #print(target_image_paths)
     target_image_paths = dd.extra.natural_sorted(target_image_paths)
-
+    #print("C")
+    #print(target_image_paths)
     if model_path:
         if verbose:
             print(f'Loading model from {model_path} ...')
@@ -71,7 +74,10 @@ def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow
 
     for image_path in target_image_paths:
         print(f'Tags of {image_path}:')
+        result_tags = []
         for tag, score in evaluate_image(image_path, model, tags, threshold):
+            result_tags.append((score * 100, tag))
             print(f'({score:05.3f}) {tag}')
+        return result_tags
 
         print()
